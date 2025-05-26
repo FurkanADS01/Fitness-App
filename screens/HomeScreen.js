@@ -5,55 +5,65 @@ import { useContext, useState } from 'react';
 import { FitnessItems } from '../Context';
 
 const HomeScreen = () => {
-  const [showIcon, setShowIcon] = useState(false);
-  const { calories, minutes, workout, } = useContext(FitnessItems);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { calories, minutes, workout } = useContext(FitnessItems);
+
+  // Tema renkleri
+  const theme = {
+    background: isDarkMode ? "#000" : "#ffffff",
+    text: isDarkMode ? "#ffffff" : "#000000",
+    card: isDarkMode ? "#1e1e1e" : "#ffffff",
+    header: isDarkMode ? "#000000d7" : "#eeeeee",
+  };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}
-      style={{ marginTop: 20 }}>
-      <View style={{ backgroundColor: "#000000d7", paddingTop: 40, paddingHorizontal: 20, height: 160, width: "100%" }}>
-        <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 50}}>
-          <Text style={{ color: "white", fontWeight: "bold", fontSize: 18 }}>SIX PACK IN 30 DAYS</Text>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={{ marginTop: 20, backgroundColor: theme.background }}
+    >
+      {/* Üst Kısım */}
+      <View style={{ backgroundColor: theme.header, paddingTop: 40, paddingHorizontal: 20, height: 160, width: "100%" }}>
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 50 }}>
+          <Text style={{ color: theme.text, fontWeight: "bold", fontSize: 18 }}>Kullanıcı Adı</Text>
 
-          {/* Dark Mode  */}
-          <TouchableOpacity onPress={() => setShowIcon(!showIcon)}>
-            {showIcon ? <Ionicons name="sunny" size={24} color="white" /> : <Ionicons name="moon" size={24} color="white" /> }
-          </TouchableOpacity>  
+          <TouchableOpacity onPress={() => setIsDarkMode(!isDarkMode)}>
+            {isDarkMode
+              ? <Ionicons name="sunny" size={24} color="white" />
+              : <Ionicons name="moon" size={24} color="black" />}
+          </TouchableOpacity>
         </View>
 
-        {/* Cards Row  */}
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 30 }}>
-
-          {/* First Card  */}
-          <View style={styles.shadowCards}>
-            <Text style={{ fontWeight: "bold", fontSize: 18 }}>{calories.toFixed(2)}</Text>
-            <Text>KCAL</Text>
+          <View style={[styles.shadowCards, { backgroundColor: theme.card }]}>
+            <Text style={[styles.cardText, { color: theme.text }]}>{calories.toFixed(2)}</Text>
+            <Text style={{ color: theme.text }}>KCAL</Text>
           </View>
 
-          {/* Second Card  */}
-          <View style={styles.shadowCards}>
-            <Text style={{ fontWeight: "bold", fontSize: 18 }}>{workout}</Text>
-            <Text>WORKOUTS</Text>
+          <View style={[styles.shadowCards, { backgroundColor: theme.card }]}>
+            <Text style={[styles.cardText, { color: theme.text }]}>{workout}</Text>
+            <Text style={{ color: theme.text }}>WORKOUTS</Text>
           </View>
 
-          {/* Third Card  */}
-          <View style={styles.shadowCards}>
-            <Text style={{ fontWeight: "bold", fontSize: 18 }}>{minutes}</Text>
-            <Text>MINUTES</Text>
+          <View style={[styles.shadowCards, { backgroundColor: theme.card }]}>
+            <Text style={[styles.cardText, { color: theme.text }]}>{minutes}</Text>
+            <Text style={{ color: theme.text }}>MINUTES</Text>
           </View>
         </View>
       </View>
-      {/* Fitness Cards  */}
-      <FitnessCards />
-    </ScrollView>
-  )
-}
 
-export default HomeScreen
+      {/* Alt Kısım (FitnessCards sarmalayıcısı) */}
+      <View style={{ /*backgroundColor: theme.background,*/ flex: 1, paddingHorizontal: 20, paddingBottom: 20 }}>
+        <FitnessCards />
+      </View>
+    </ScrollView>
+
+  );
+};
+
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   shadowCards: {
-    backgroundColor: "#ffffff",
     width: "32%",
     height: 80,
     borderRadius: 10,
@@ -63,6 +73,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5
+    elevation: 5,
   },
+  cardText: {
+    fontWeight: "bold",
+    fontSize: 18,
+  }
 });
